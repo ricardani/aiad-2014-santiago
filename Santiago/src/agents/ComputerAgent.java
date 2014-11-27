@@ -20,6 +20,7 @@ import logic.Tile;
 import static utils.Statics.*;
 import static utils.ConsolePrints.*;
 import static logic.Agent.*;
+import utils.Pair;
 import utils.TilePlacement;
 
 // classe do agente
@@ -39,6 +40,7 @@ public class ComputerAgent extends Agent {
         private Vector<Player> allPlayers = new Vector<>();     
         private Board gameBoard = new Board();
         private Vector<Tile> chooseTiles = new Vector<>();
+        private Vector<Pair> waterLicitations = new Vector<>();
         // construtor do behaviour
         public ComputerAgentBehaviour(Agent a) {
             super(a);
@@ -88,8 +90,8 @@ public class ComputerAgent extends Agent {
             }
         }
         
-        private void sendLicitation() {
-            money = generateLicitation(myInfo, playerLogic, allPlayers);
+        private void sendTileLicitation() {
+            money = generateTileLicitation(myInfo, playerLogic, allPlayers);
             sendMessage(ACLMessage.INFORM, money);
         }
         
@@ -97,6 +99,18 @@ public class ComputerAgent extends Agent {
             TilePlacement tp = generatePlantChoice(myInfo, playerLogic, gameBoard, chooseTiles);
 
             sendMessage(ACLMessage.INFORM, tp);
+        }
+        
+        private void sendWaterLicitation() {
+            Pair waterL = generateWaterLicitation(myInfo, playerLogic, allPlayers, gameBoard.getWaterPossiblePaths());
+            
+            sendMessage(ACLMessage.INFORM, waterL);
+        }
+        
+        private void sendWaterPlacement() {
+            int choice = generateWaterPlacement(myInfo, playerLogic, allPlayers, gameBoard.getWaterPossiblePaths(), waterLicitations);
+            
+            sendMessage(ACLMessage.INFORM, choice);
         }
         
         //ACL Messages
@@ -118,14 +132,15 @@ public class ComputerAgent extends Agent {
                     if(aux.get(0) instanceof Tile){
                         print(TILES, content_obj);
                         saveTiles(content_obj);
-                    }
-                    else if(aux.get(0) instanceof Integer)
+                    }else if(aux.get(0) instanceof Integer){
                         print(CHANNELS, content_obj);
-                    else if(aux.get(0) instanceof Color)
+                    }else if(aux.get(0) instanceof Color){
                         order = (Vector<Color>) content_obj;
-                    else if(aux.get(0) instanceof Player){
+                    }else if(aux.get(0) instanceof Player){
                         print(PLAYERS, content_obj);
                         saveMyInfo(content_obj);
+                    }else if(aux.get(0) instanceof Pair){
+                        print(WATER_LICITATIONS, content_obj);
                     }
                 }
             } catch (UnreadableException ex) {
@@ -161,34 +176,50 @@ public class ComputerAgent extends Agent {
         
         private void ACL_Request(String content) {
             switch (content) {
-                case REQUEST_LICITATION:
-                    sendLicitation();
+                case REQUEST_TILE_LICITATION:
+                    sendTileLicitation();
                     break;
                 case REQUEST_TILE_PLACEMENT:
                     sendTilePlacement();
+                    break;
+                case REQUEST_WATER_LICITATION:
+                    sendWaterLicitation();
+                    break;
+                case REQUEST_WATER_PLACEMENT:
+                    sendWaterPlacement();
                     break;
             }
         }
         
         private void ACL_Confirm(String content) {
             switch (content) {
-                case CONFIRM_LICITAION:
+                case CONFIRM_TILE_LICITAION:
                     myInfo.Pay(money);
                     money = 0;
                     licitation_type = (licitation_type + 1) % 2;
                     break;
                 case CONFIRM_TILE_PLACEMENT:
                     break;
+                case CONFIRM_WATER_LICITAION:
+                    break;
+                case CONFIRM_WATER_PLACEMENT:
+                    break;
             }
         }
-        
+         
         private void ACL_Cancel(String content) {
             switch (content) {
-                case REFUSE_LICITATION:
-                    sendLicitation();
+                case REFUSE_TILE_LICITATION:
+                    sendTileLicitation();
                     break;
                 case REFUSE_TILE_PLACEMENT:
                     sendTilePlacement();
+                    break;
+                case REFUSE_WATER_LICITATION:
+                    sendWaterLicitation();
+                    break;
+                case REFUSE_WATER_PLACEMENT:
+                    sendWaterPlacement();
                     break;
             }
         }
@@ -206,7 +237,59 @@ public class ComputerAgent extends Agent {
         private void saveTiles(Serializable content_obj) {
             chooseTiles = (Vector<Tile>) content_obj;
         }
-
+        
+        private void print(String type, Serializable obj){
+        
+        if(interface_type != NO_INTERFACE){
+            
+            switch (type){
+                case BOARD:
+                    if(interface_type == CONSOLE_INTERFACE){
+                        Board b = (Board) obj;
+                        printBoard(b);
+                    }else{
+                        
+                    }
+                    break;
+                case TILES:
+                    if(interface_type == CONSOLE_INTERFACE){
+                        Vector<Tile> tiles = (Vector<Tile>) obj;
+                        printTilesForRound(tiles);
+                    }else{
+                        
+                    }
+                    break;
+                case PLAYERS:
+                    if(interface_type == CONSOLE_INTERFACE){
+                        Vector<Player> p = (Vector<Player>) obj;
+                        printPlayerInfo(order, p);
+                    }else{
+                        
+                    }
+                    break;
+                    
+                case CHANNELS:
+                    if(interface_type == CONSOLE_INTERFACE){
+                        Vector<Integer> channles = (Vector<Integer>) obj;
+                        printWaterPossibelPaths(channles);
+                    }else{
+                        
+                    }
+                    break;
+                    
+                case WATER_LICITATIONS:
+                    if(interface_type == CONSOLE_INTERFACE){
+                        waterLicitations = (Vector<Pair>) obj;
+                        printWaterLicitations(order, allPlayers, waterLicitations, gameBoard.getWaterPossiblePaths());
+                    }else{
+                        
+                    }
+                    break;
+            }
+            
+        }
+    }
+        
     }   // fim da classe ManagerBehaviour
     
     // método setup
@@ -265,50 +348,7 @@ public class ComputerAgent extends Agent {
         } catch (FIPAException e) {
              System.err.println("Error");
         }
-    }
-    
-    protected void print(String type, Serializable obj){
-        
-        if(interface_type != NO_INTERFACE){
-            
-            switch (type){
-                case BOARD:
-                    if(interface_type == CONSOLE_INTERFACE){
-                        Board b = (Board) obj;
-                        printBoard(b);
-                    }else{
-                        
-                    }
-                    break;
-                case TILES:
-                    if(interface_type == CONSOLE_INTERFACE){
-                        Vector<Tile> tiles = (Vector<Tile>) obj;
-                        printTilesForRound(tiles);
-                    }else{
-                        
-                    }
-                    break;
-                case PLAYERS:
-                    if(interface_type == CONSOLE_INTERFACE){
-                        Vector<Player> p = (Vector<Player>) obj;
-                        printPlayerInfo(order, p);
-                    }else{
-                        
-                    }
-                    break;
-                    
-                case CHANNELS:
-                    if(interface_type == CONSOLE_INTERFACE){
-                        Vector<Integer> channles = (Vector<Integer>) obj;
-                        printWaterPossibelPaths(channles);
-                    }else{
-                        
-                    }
-                    break;
-            }
-            
-        }
-    }
+    }   
     
     // envia mensagem 'content' a todos os agentes 'receiver'
     protected void sendMessage(int ACLtype, String content){

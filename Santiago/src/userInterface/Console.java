@@ -131,25 +131,6 @@ public class Console {
         System.out.println();
     }
 
-    private void showWaterLicitations() {
-        Vector<Color> order = g.getOrder();
-        Map<String, Player> players = g.getPlayers();
-        Vector<Pair<Integer, Integer>> licitations = g.getWaterLicitationForRound();
-
-        Player p;
-        printWaterPossibelPaths(g.getWaterPossiblePaths());
-
-        System.out.println("Licitações");
-
-        for (int i = 0; i < order.size() - 1; ++i) {
-            p = players.get(order.get(i).toString());
-            System.out.println("Joagdor " + p.getName() + "\tLicitação: " + licitations.get(i));
-        }
-
-        System.out.println();
-
-    }
-
     private void chooseAndPlaceTiles() {
         Vector<Color> order = g.getOrder();
         Map<String, Player> players = g.getPlayers();
@@ -288,12 +269,14 @@ public class Console {
     private void water() {
         printWaterPossibelPaths(g.getWaterPossiblePaths());
         bidsWaterChannels();
-        showWaterLicitations();
+        printWaterPossibelPaths(g.getWaterPossiblePaths());
+        printWaterLicitations(g.getOrder(), g.getPlayers(), g.getWaterLicitationForRound());
         chooseWaterChannel();
     }
 
     private void verifications() {
         g.checkTilesIrrigation();
+        g.giveMoneyBonus();
     }
 
     private boolean endGame() {
@@ -301,7 +284,7 @@ public class Console {
     }
 
     private void finalResults() {
-        g.endGame();
+        g.calculateFinalResults();
     }
 
     public void gameCycle() {

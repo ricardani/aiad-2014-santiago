@@ -70,7 +70,10 @@ public class Statics {
             }
         }
     }
-       
+    
+    public static final int MONEY_BONUS = 3;
+    
+    
     //Static Vars For Agents
     public static final String ENTER_GAME = "Enter Game";
     public static final String EXIT_GAME = "Exit Game";
@@ -99,6 +102,7 @@ public class Statics {
     public static final String BOARD = "Board";
     public static final String TILES = "Tiles";
     public static final String CHANNELS = "Channels";
+    public static final String WATER_LICITATIONS = "Water Licitations";
     public static final String PLAYERS = "Players";
     
     public static final int PLAYER_1 = 0;
@@ -107,13 +111,21 @@ public class Statics {
     public static final int PLAYER_4 = 3;
     public static final int PLAYER_5 = 4;
     
-    public static final String REQUEST_LICITATION = "Request Licitation";
-    public static final String CONFIRM_LICITAION = "Confirm Licitation";
-    public static final String REFUSE_LICITATION = "Refuse Licitation";
+    public static final String REQUEST_TILE_LICITATION = "Request Tile Licitation";
+    public static final String CONFIRM_TILE_LICITAION = "Confirm Tile Licitation";
+    public static final String REFUSE_TILE_LICITATION = "Refuse Tile Licitation";
+    
+    public static final String REQUEST_WATER_LICITATION = "Request Water Licitation";
+    public static final String CONFIRM_WATER_LICITAION = "Confirm Water Licitation";
+    public static final String REFUSE_WATER_LICITATION = "Refuse Water Licitation";
     
     public static final String REQUEST_TILE_PLACEMENT = "Request Tile Placement";
     public static final String CONFIRM_TILE_PLACEMENT = "Confirm Tile Placement";
     public static final String REFUSE_TILE_PLACEMENT = "Refuse Tile Placement";
+    
+    public static final String REQUEST_WATER_PLACEMENT = "Request Water Placement";
+    public static final String CONFIRM_WATER_PLACEMENT = "Confirm Water Placement";
+    public static final String REFUSE_WATER_PLACEMENT = "Refuse Water Placement";
     
     public static final int LICITATION_TILES = 0;
     public static final int LICITATION_WATER = 1;

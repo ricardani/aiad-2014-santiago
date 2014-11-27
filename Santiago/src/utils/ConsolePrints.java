@@ -146,4 +146,37 @@ public class ConsolePrints {
         }
     }
     
+    public static void printWaterLicitations(Vector<Color> order, Map<String, Player> players, Vector<Pair<Integer, Integer>> licitations) {
+        Player p;
+       
+        System.out.println("Licitações");
+
+        for (int i = 0; i < order.size() - 1; ++i) {
+            p = players.get(order.get(i).toString());
+            System.out.println("Joagdor " + p.getName() + "\tLicitação: " + licitations.get(i));
+        }
+
+        System.out.println();
+    }
+    
+    public static void printWaterLicitations(Vector<Color> order, Vector<Player> players, Vector<Pair> licitations, Vector<Integer> waterPossibelPaths ) {
+        
+        int money;
+
+        System.out.println("Canais de Água");
+
+        for (int i = 0; i < waterPossibelPaths.size(); i++) {
+            money = 0;
+            System.out.print("[" + i + "] -> Canal de Agua numero: " + waterPossibelPaths.get(i));
+            for (Pair<Integer, Integer> licitation : licitations) {
+                if (licitation.getFirst() == i) {
+                    money += licitation.getSecond();
+                }
+            }
+            System.out.println(" Recebe: " + money + " escudos.");
+        }
+
+        System.out.println();
+    }
+    
 }

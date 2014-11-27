@@ -11,6 +11,7 @@ import jade.lang.acl.UnreadableException;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -25,7 +26,9 @@ import utils.TilePlacement;
 // classe do agente
 public class Manager extends Agent {
     
-    protected int numberPlayers;
+    protected int numberPlayers, numberOfPlays;
+    protected Timestamp time = new Timestamp(-1);
+    protected long initTime, endTime;
     
     // classe do behaviour
     class ManagerBehaviour extends SimpleBehaviour {
@@ -57,13 +60,19 @@ public class Manager extends Agent {
             }else if(gameLoop == GAME_TILES_BIDDING){
                 ACL_Inform_tilesBidding(msg, player);
             }else if(gameLoop == GAME_TILES_PLACEMENT){
-                
                 ACL_Inform_tilesPlacement(msg, player);
+            }else if(gameLoop == GAME_WATER_BIDDING){
+                ACL_Inform_waterBidding(msg, player);
+            }else if(gameLoop == GAME_WATER_PLACEMENT){
+                ACL_Inform_waterPlacement(msg, player);
             }
             
         }
         
         private void startGame() {
+            
+            initTime = time.getTime();
+            
             g.setNumberOfPlayers(numberPlayers);
             gameLoop = GAME_TILES_BIDDING;
             startNewRound();
@@ -71,6 +80,8 @@ public class Manager extends Agent {
         }
         
         private void startNewRound(){
+            numberOfPlays++;
+            
             g.newTilesForRound();
             sendBoardAndPlayers();
             
@@ -99,6 +110,12 @@ public class Manager extends Agent {
             }
         }
         
+        private void sendAllWaterLicitations() {
+            for ( String player : player_color.keySet() ) {
+                sendMessage(ACLMessage.INFORM, g.getWaterLicitationForRound(), player);
+            }
+        }
+        
         private void sendRequestTileLicitation(int playerID){
             
             Color c;
@@ -106,7 +123,7 @@ public class Manager extends Agent {
             for (String player : player_color.keySet() ) {
                 c = g.getOrder().get(playerID);
                 if(player_color.get(player).equals(c)){
-                    sendMessage(ACLMessage.REQUEST, REQUEST_LICITATION, player);
+                    sendMessage(ACLMessage.REQUEST, REQUEST_TILE_LICITATION, player);
                 }
             }
             
@@ -123,6 +140,28 @@ public class Manager extends Agent {
             }
         }
         
+        private void sendRequestWaterLicitation(int playerID) {
+            Color c;
+            
+            for (String player : player_color.keySet() ) {
+                c = g.getOrder().get(playerID);
+                if(player_color.get(player).equals(c)){
+                    sendMessage(ACLMessage.REQUEST, REQUEST_WATER_LICITATION, player);
+                }
+            }
+        }
+        
+        private void sendRequestWaterPlacement(int playerID) {
+            Color c;
+            
+            for (String player : player_color.keySet() ) {
+                c = g.getOrder().get(playerID);
+                if(player_color.get(player).equals(c)){
+                    sendMessage(ACLMessage.REQUEST, REQUEST_WATER_PLACEMENT, player);
+                }
+            }
+        }
+        
         //ACL Messages
         private void ACL_Inform_tilesBidding(ACLMessage msg, String player) {
             if (msg.getPerformative() == ACLMessage.INFORM) {
@@ -135,7 +174,7 @@ public class Manager extends Agent {
                         if(player_color.get(player).equals(c)){
                             Player p = g.getPlayer(c);
                             if(p.Pay(money)){
-                                sendMessage(ACLMessage.CONFIRM, CONFIRM_LICITAION, player);
+                                sendMessage(ACLMessage.CONFIRM, CONFIRM_TILE_LICITAION, player);
                                 playerOrder++;
                                 
                                 if (money == 0) {
@@ -168,10 +207,10 @@ public class Manager extends Agent {
                                     tilePlacement = true;
                                 }
                             }else{
-                                sendMessage(ACLMessage.CANCEL, REFUSE_LICITATION, player);
+                                sendMessage(ACLMessage.CANCEL, REFUSE_TILE_LICITATION, player);
                             }
                         }else{
-                            sendMessage(ACLMessage.CANCEL, REFUSE_LICITATION, player);
+                            sendMessage(ACLMessage.CANCEL, REFUSE_TILE_LICITATION, player);
                         }
                     }
                     
@@ -218,6 +257,8 @@ public class Manager extends Agent {
                                         gameLoop = GAME_WATER_BIDDING;
                                         
                                         sendBoardAndPlayers();
+                                        
+                                        sendRequestWaterLicitation(playerOrder);
                                     }
                                     
                                 }else{
@@ -230,6 +271,84 @@ public class Manager extends Agent {
                         }else{
                             sendMessage(ACLMessage.CANCEL, REFUSE_TILE_PLACEMENT, player);
                         }
+                    }
+                    
+                } catch (UnreadableException ex) {
+                    Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        private void ACL_Inform_waterBidding(ACLMessage msg, String player) {
+            if (msg.getPerformative() == ACLMessage.INFORM) {
+                try {
+                    Serializable content_obj = msg.getContentObject();
+                    
+                    if(content_obj instanceof Pair){
+                        Color c = g.getOrder().get(playerOrder);
+                        if(player_color.get(player).equals(c)){
+                            Pair waterL = (Pair) content_obj;
+                            int waterChoice = (Integer) waterL.getFirst(), money = (Integer) waterL.getSecond();
+                            
+                            Player p = g.getPlayer(c);
+                            Vector<Integer> waterPossibelPaths = g.getWaterPossiblePaths();
+                            
+                            if(waterChoice < waterPossibelPaths.size() && waterChoice >= 0 && money <= p.getEscudos()){
+                                
+                                sendMessage(ACLMessage.CONFIRM, CONFIRM_WATER_LICITAION, player);
+                                playerOrder++;
+                                
+                                g.addWaterLicitationForRound(waterL);
+                                
+                                if(playerOrder < (numberPlayers - 1))
+                                    sendRequestWaterLicitation(playerOrder);
+                                else{
+                                    gameLoop = GAME_WATER_PLACEMENT;
+                                    sendAllWaterLicitations();
+                                    sendRequestWaterPlacement(playerOrder);
+                                }
+                            }else{
+                                sendMessage(ACLMessage.CANCEL, REFUSE_WATER_LICITATION, player);
+                            }
+                        }else{
+                            sendMessage(ACLMessage.CANCEL, REFUSE_WATER_LICITATION, player);
+                        }
+                    }else{
+                        sendMessage(ACLMessage.CANCEL, REFUSE_WATER_LICITATION, player);
+                    }
+                    
+                } catch (UnreadableException ex) {
+                    Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        private void ACL_Inform_waterPlacement(ACLMessage msg, String player) {
+            if (msg.getPerformative() == ACLMessage.INFORM) {
+                try {
+                    Serializable content_obj = msg.getContentObject();
+                    
+                    if(content_obj instanceof Integer){
+                        Color c = g.getOrder().get(playerOrder);
+                        if(player_color.get(player).equals(c)){
+                            int waterChoice = (Integer) content_obj;
+                            
+                            if (waterChoice >= 0 && waterChoice < g.getWaterPossiblePaths().size()) {
+                                
+                                g.placeWaterChannel(waterChoice);
+                                
+                                sendBoardAndPlayers();
+                                
+                                hasGameEnded();
+                                
+                            } else {
+                                sendMessage(ACLMessage.CANCEL, REFUSE_WATER_PLACEMENT, player);
+                            }
+                        }else{
+                            sendMessage(ACLMessage.CANCEL, REFUSE_WATER_PLACEMENT, player);
+                        }
+                    }else{
+                        sendMessage(ACLMessage.CANCEL, REFUSE_WATER_PLACEMENT, player);
                     }
                     
                 } catch (UnreadableException ex) {
@@ -269,6 +388,50 @@ public class Manager extends Agent {
                 sendMessage(ACLMessage.REJECT_PROPOSAL, EXIT_GAME, player);
             }
             endGame = true;
+        }
+        
+        private void hasGameEnded() {
+            
+            g.checkTilesIrrigation();
+            g.giveMoneyBonus();
+            g.clearWaterLicitationForRound();
+            
+            if(g.finish()){
+                g.checkTilesIrrigation();
+                g.calculateFinalResults();
+                sendBoardAndPlayers();
+                finishGame();
+                gameLoop = GAME_END;
+                endTime = time.getTime();
+                showGameInfo();
+            }else{
+                playerOrder = PLAYER_1;
+                gameLoop = GAME_TILES_BIDDING;
+                startNewRound();
+                sendRequestTileLicitation(playerOrder);
+            }
+        }
+        
+        private void showGameInfo() {
+            System.out.println();
+            System.out.println();
+            System.out.println("Jogadas  ==>  " + numberOfPlays);
+            System.out.println();
+            System.out.println();
+            
+            long diff = endTime - initTime;
+            int seconds = (int) (diff / 1000) % 60 ;
+            int minutes = (int) ((diff / (1000*60)) % 60);
+            int hours   = (int) ((diff / (1000*60*60)) % 24);
+            
+            System.out.println("Diff : " + diff);
+            
+            if(hours > 0)
+                System.out.println("Horas : " + hours);
+            if(minutes > 0)
+                System.out.println("Minutos : " + minutes);
+            if(seconds > 0)
+                System.out.println("Segundos : " + seconds);
         }
         
     }   // fim da classe ManagerBehaviour

@@ -1,22 +1,13 @@
-/*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
 package logic;
 
 import java.awt.Color;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 import utils.Pair;
 import static utils.Statics.*;
-import static utils.VectorUtils.*;
 
-/**
- *
- * @author Ricardo
- */
 public class Game {
     
     private final String[] terrains = {"Banana", "Feijao", "Potato", "Sugar", "Chilli"};
@@ -107,6 +98,14 @@ public class Game {
         this.waterLicitationForRound = waterLicitationForRound;
     }
     
+    public void clearWaterLicitationForRound() {
+        this.waterLicitationForRound.clear();
+    }
+    
+    public void addWaterLicitationForRound(Pair p) {
+        this.waterLicitationForRound.add(p);
+    }
+    
     public void newTilesForRound() {
         tilesForRound.clear();
         for (int i = 0; i <= players.size(); ++i) {
@@ -148,19 +147,7 @@ public class Game {
     }
     
     public Vector<Integer> getWaterPossiblePaths() {
-        
-        Vector<Integer> waterPossibelPaths = new Vector<>();
-        Channel[] channels = b.getChannels();
-        
-        for (Channel channel : channels) {
-            if (channel.hasWater()) {
-                waterPossibelPaths.addAll(channel.getAdjacentChannels());
-            }
-        }
-        
-        waterPossibelPaths = removeDuplicates(waterPossibelPaths);
-        
-        return waterPossibelPaths;
+        return b.getWaterPossiblePaths();
     }
     
     public void placeWaterChannel(int channel) {
@@ -213,6 +200,8 @@ public class Game {
             }
         }
         
+        
+        
     }
     
     private boolean contains(Vector<Vector<Tile>> v, Tile t) {
@@ -250,7 +239,7 @@ public class Game {
         }
     }
     
-    public void endGame() {
+    public void calculateFinalResults() {
         Vector<Vector<Tile>> vec = new Vector<>();
         for (int i = 0; i < b.getTiles().length; ++i) {
             for (int j = 0; j < b.getTiles()[i].length; ++j) {
@@ -273,6 +262,18 @@ public class Game {
                 p.receiveMoney(fields * workers);
             }
         }
+        
+        Vector<Player> players = getPlayersVector();
+        
+        Collections.sort(players);
+        Collections.reverse(players);
+        
+        order.clear();
+        
+        for(Player p : players){
+            order.add(p.getColor());
+        }
+        
     }
     
     
@@ -290,5 +291,11 @@ public class Game {
         }
         
         return result;
+    }
+
+    public void giveMoneyBonus() {
+        for (Player player : players.values()) {
+            player.receiveMoney(MONEY_BONUS);
+        }
     }
 }

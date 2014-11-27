@@ -13,7 +13,7 @@ import static utils.Statics.*;
  *
  * @author Utilizador
  */
-public class Player implements Serializable{
+public class Player implements Serializable, Comparable<Player>{
     private final Color color;
     private int escudos;
     private final String Name;
@@ -51,5 +51,10 @@ public class Player implements Serializable{
     
     public void receiveMoney(int e){
         escudos += e;
+    }
+
+    @Override
+    public int compareTo(Player p) {
+        return ((Integer)this.escudos).compareTo(p.getEscudos());
     }
 }

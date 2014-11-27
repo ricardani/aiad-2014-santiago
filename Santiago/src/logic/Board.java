@@ -1,16 +1,9 @@
-/*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
 package logic;
 
 import java.io.Serializable;
+import java.util.Vector;
+import static utils.VectorUtils.removeDuplicates;
 
-/**
- *
- * @author Utilizador
- */
 public class Board implements Serializable{
     
     private final Tile[][] tile_array = new Tile[6][8];
@@ -51,6 +44,21 @@ public class Board implements Serializable{
     
     public void fillWaterChannel(int n){
         channel_array[n].fill();
+    }
+    
+    public Vector<Integer> getWaterPossiblePaths() {
+        
+        Vector<Integer> waterPossibelPaths = new Vector<>();
+        
+        for (Channel channel : channel_array) {
+            if (channel.hasWater()) {
+                waterPossibelPaths.addAll(channel.getAdjacentChannels());
+            }
+        }
+        
+        waterPossibelPaths = removeDuplicates(waterPossibelPaths);
+        
+        return waterPossibelPaths;
     }
     
         
