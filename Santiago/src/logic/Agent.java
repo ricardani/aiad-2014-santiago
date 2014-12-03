@@ -7,7 +7,7 @@ import utils.TilePlacement;
 
 public class Agent {
 
-    public static int generateLicitation(Player p, int logic, Vector<Player> vp) {
+    public static int generateTileLicitation(Player p, int logic, Vector<Player> vp) {
         int money = 0;
 
         switch (logic) {
@@ -135,7 +135,7 @@ public class Agent {
         do {
             x = RANDOM_GENERATOR.nextInt(8);
             y = RANDOM_GENERATOR.nextInt(6);
-        } while (b.getTiles()[y][x].can_plant());
+        } while (!b.getTiles()[y][x].can_plant());
 
         return new TilePlacement(tiles.get(index), x, y);
     }

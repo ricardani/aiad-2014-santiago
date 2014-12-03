@@ -97,18 +97,17 @@ public class ComputerAgent extends Agent {
         
         private void sendTilePlacement() {   
             TilePlacement tp = generatePlantChoice(myInfo, playerLogic, gameBoard, chooseTiles);
-
             sendMessage(ACLMessage.INFORM, tp);
         }
         
         private void sendWaterLicitation() {
-            Pair waterL = generateWaterLicitation(myInfo, playerLogic, allPlayers, gameBoard.getWaterPossiblePaths());
+            Pair waterL = generateWaterLicitation(myInfo, playerLogic, allPlayers, gameBoard.getWaterPossiblePaths(), gameBoard);
             
             sendMessage(ACLMessage.INFORM, waterL);
         }
         
         private void sendWaterPlacement() {
-            int choice = generateWaterPlacement(myInfo, playerLogic, allPlayers, gameBoard.getWaterPossiblePaths(), waterLicitations);
+            int choice = generateWaterPlacement(myInfo, playerLogic, allPlayers, gameBoard.getWaterPossiblePaths(), waterLicitations, gameBoard);
             
             sendMessage(ACLMessage.INFORM, choice);
         }
