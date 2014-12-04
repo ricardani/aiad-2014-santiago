@@ -34,8 +34,21 @@ public class Board implements Serializable {
         }
         
         waterPossibelPaths = removeDuplicates(waterPossibelPaths);
-        
+        waterPossibelPaths = getWaterPossiblePathsAux(waterPossibelPaths);
+         
         return waterPossibelPaths;
+    }
+    
+    private Vector<Integer> getWaterPossiblePathsAux(Vector<Integer> waterPaths){
+
+        for(int i = 0; i < waterPaths.size(); i++){
+            if(channel_array[waterPaths.get(i)].hasWater()){
+                waterPaths.remove(i);
+                i--;
+            }
+        }
+        
+        return waterPaths;
     }
     
     

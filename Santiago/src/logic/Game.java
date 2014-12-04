@@ -213,29 +213,29 @@ public class Game {
         return false;
     }
     
-    private void fillVec(Vector<Vector<Tile>> v, int i, int j, String type, int index) {
-        if (!contains(v, b.getTiles()[i][j])) {
+    private void fillVec(Vector<Vector<Tile>> v, int y, int x, String type, int index) {
+        if (!contains(v, b.getTiles()[y][x])) {
             
             if (index < 0) {
                 Vector<Tile> aux = new Vector<>();
-                aux.add(b.getTiles()[i][j]);
+                aux.add(b.getTiles()[y][x]);
                 v.add(aux);
                 index = v.size() - 1;
             } else {
-                if (b.getTiles()[i][j].getType().equals(type)) {
-                    v.get(index).add(b.getTiles()[i][j]);
+                if (b.getTiles()[y][x].getType().equals(type)) {
+                    v.get(index).add(b.getTiles()[y][x]);
                 } else {
                     return;
                 }
             }
-            if(i < 7)
-                fillVec(v, i + 1, j, type, index);
-            if(i > 0)
-                fillVec(v, i - 1, j, type, index);
-            if(j < 5)
-                fillVec(v, i, j + 1, type, index);
-            if(j > 0)
-                fillVec(v, i, j - 1, type, index);
+            if(y < 5)
+                fillVec(v, y + 1, x, type, index);
+            if(y > 0)
+                fillVec(v, y - 1, x, type, index);
+            if(x < 7)
+                fillVec(v, y, x + 1, type, index);
+            if(x > 0)
+                fillVec(v, y, x - 1, type, index);
         }
     }
     
@@ -263,14 +263,14 @@ public class Game {
             }
         }
         
-        Vector<Player> players = getPlayersVector();
+        Vector<Player> playersVec = getPlayersVector();
         
-        Collections.sort(players);
-        Collections.reverse(players);
+        Collections.sort(playersVec);
+        Collections.reverse(playersVec);
         
         order.clear();
         
-        for(Player p : players){
+        for(Player p : playersVec){
             order.add(p.getColor());
         }
         

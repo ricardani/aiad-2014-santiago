@@ -96,7 +96,7 @@ public class ComputerAgent extends Agent {
         }
         
         private void sendTilePlacement() {   
-            TilePlacement tp = generatePlantChoice(myInfo, playerLogic, gameBoard, chooseTiles);
+            TilePlacement tp = generateTilePlacement(myInfo, playerLogic, gameBoard, chooseTiles);
             sendMessage(ACLMessage.INFORM, tp);
         }
         
@@ -297,20 +297,38 @@ public class ComputerAgent extends Agent {
         
         // obtém argumentos
         Object[] args = getArguments();
-        if (args != null && args.length > 0) {
-            interface_type = Integer.parseInt((String) args[0]);
-            
-            if(interface_type != NO_INTERFACE && interface_type != CONSOLE_INTERFACE && interface_type != GRAPHIC_INTERFACE ){
+        if(args != null){
+            //Interface
+            if (args.length > 0) {
+                interface_type = Integer.parseInt((String) args[0]);
+
+                if(interface_type != NO_INTERFACE && interface_type != CONSOLE_INTERFACE && interface_type != GRAPHIC_INTERFACE ){
+                    interface_type = NO_INTERFACE;
+                }
+            } else {
                 interface_type = NO_INTERFACE;
+
             }
-        } else {
-            interface_type = NO_INTERFACE;
             
+            //Player Logic
+            if (args.length > 1) {
+                playerLogic = Integer.parseInt((String) args[1]);
+
+                if(playerLogic != LOGIC_RANDOM && playerLogic != LOGIC_SPENDER && playerLogic != LOGIC_SAVER ){
+                    playerLogic = LOGIC_RANDOM;
+                }
+            } else {
+                playerLogic = LOGIC_RANDOM;
+
+            }
+            
+            //Is Human
+            if (args.length > 2) {
+                //Se é humano ou nao
+            } else {
+
+            }
         }
-        
-        
-        
-        playerLogic = LOGIC_RANDOM;
         
         licitation_type = LICITATION_TILES;
         

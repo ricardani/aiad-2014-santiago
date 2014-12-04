@@ -334,7 +334,7 @@ public class Manager extends Agent {
                             int waterChoice = (Integer) content_obj;
                             
                             if (waterChoice >= 0 && waterChoice < g.getWaterPossiblePaths().size()) {
-                                
+                                                                
                                 g.placeWaterChannel(waterChoice);
                                 
                                 sendBoardAndPlayers();

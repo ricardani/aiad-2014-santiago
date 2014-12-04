@@ -25,7 +25,7 @@ public class Agent {
         return money;
     }
 
-    public static TilePlacement generatePlantChoice(Player p, int logic, Board b, Vector<Tile> tiles) {
+    public static TilePlacement generateTilePlacement(Player p, int logic, Board b, Vector<Tile> tiles) {
         TilePlacement tile = null;
 
         switch (logic) {
@@ -149,12 +149,19 @@ public class Agent {
         }
         String type = choice.getType();
         TilePlacement tp = null;
-        if (getCloseField(b, type, choice, tp)) {
+        
+        tp = getCloseField(b, type, choice);
+        
+        if (tp != null) {
             return tp;
         }
-        if (getCloseWater(b, type, choice, tp)) {
+        
+        tp = getCloseWater(b, type, choice);
+                
+        if (tp != null) {
             return tp;
         }
+        
         return getFirstChoice(b, type, choice);
     }
 
@@ -167,17 +174,24 @@ public class Agent {
         }
         String type = choice.getType();
         TilePlacement tp = null;
-
-        if (getCloseWater(b, type, choice, tp)) {
+        
+        tp = getCloseField(b, type, choice);
+        
+        if (tp != null) {
             return tp;
         }
-        if (getCloseField(b, type, choice, tp)) {
+        
+        tp = getCloseWater(b, type, choice);
+                
+        if (tp != null) {
             return tp;
         }
+        
         return getFirstChoice(b, type, choice);
     }
 
-    private static boolean getCloseField(Board b, String type, Tile choice, TilePlacement tp) {
+    private static TilePlacement getCloseField(Board b, String type, Tile choice) {
+        TilePlacement tp = null;
         for (int x = 0; x < 8; ++x) {
             for (int y = 0; y < 6; ++y) {
 
@@ -185,44 +199,46 @@ public class Agent {
                     if (x > 0) {
                         if (b.getTiles()[y][x - 1].getType().equals(type)) {
                             tp = new TilePlacement(choice, x, y);
-                            return true;
+                            return tp;
                         }
                     } else if (x < 7) {
                         if (b.getTiles()[y][x + 1].getType().equals(type)) {
                             tp = new TilePlacement(choice, x, y);
-                            return true;
+                            return tp;
                         }
                     } else if (y > 0) {
                         if (b.getTiles()[y - 1][x].getType().equals(type)) {
                             tp = new TilePlacement(choice, x, y);
-                            return true;
+                            return tp;
                         }
                     } else if (y < 5) {
                         if (b.getTiles()[y + 1][x].getType().equals(type)) {
                             tp = new TilePlacement(choice, x, y);
-                            return true;
+                            return tp;
                         }
                     }
 
                 }
             }
         }
-        return false;
+        return tp;
     }
 
-    private static boolean getCloseWater(Board b, String type, Tile choice, TilePlacement tp) {
+    private static TilePlacement getCloseWater(Board b, String type, Tile choice) {
+        TilePlacement tp = null;
         for (int i = 0; i < b.getChannels().length; ++i) {
             if (b.getChannels()[i].hasWater()) {
                 Vector<Pair<Integer, Integer>> possibleChoices = b.getChannels()[i].getAdjacentTiles();
                 for (int j = 0; j < possibleChoices.size(); ++j) {
-                    if (b.getTiles()[possibleChoices.get(i).getSecond()][possibleChoices.get(i).getFirst()].can_plant()) {
-                        tp = new TilePlacement(choice, possibleChoices.get(i).getFirst(), possibleChoices.get(i).getSecond());
-                        return true;
+                    if (b.getTiles()[possibleChoices.get(j).getFirst()][possibleChoices.get(j).getSecond()].can_plant()) {
+                        tp = new TilePlacement(choice, possibleChoices.get(j).getSecond(), possibleChoices.get(j).getFirst());
+                        return tp;
                     }
                 }
             }
         }
-        return false;
+        
+        return tp;
     }
 
     private static TilePlacement getFirstChoice(Board b, String type, Tile choice) {
@@ -240,8 +256,8 @@ public class Agent {
         for (int i = 0; i < waterPaths.size(); ++i) {
             Vector<Pair<Integer, Integer>> AdjacentTiles = b.getChannels()[waterPaths.get(i)].getAdjacentTiles();
             for (int j = 0; j < AdjacentTiles.size(); ++j) {
-                if (b.getTiles()[AdjacentTiles.get(j).getSecond()][AdjacentTiles.get(j).getFirst()]
-                        .can_plant()) {
+                Tile t = b.getTiles()[AdjacentTiles.get(j).getFirst()][AdjacentTiles.get(j).getSecond()];
+                if (t.can_plant()) {
                     return i;
                 }
             }
@@ -251,24 +267,34 @@ public class Agent {
     }
 
     private static int getSaverWaterPlacement(Vector<Pair> waterLicitations, Vector<Integer> waterPaths) {
-        int choice = 0, money = (int) waterLicitations.get(0).getSecond();
+        int choice = 0, money = -1;
+        System.out.print(".");
+        if(waterLicitations.isEmpty()){
+            choice = RANDOM_GENERATOR.nextInt(waterPaths.size());
+            System.out.println("Choice  --- >  " +choice);
+            return choice;
+        }
 
-        for (int i = 1; i < waterLicitations.size(); ++i) {
+        for (int i = 0; i < waterLicitations.size(); i++) {
             if ((int) waterLicitations.get(i).getSecond() > money) {
                 choice = i;
                 money = (int) waterLicitations.get(i).getSecond();
             }
         }
-
-        return waterPaths.indexOf(waterLicitations.get(choice));
+        
+ 
+        return waterPaths.indexOf(waterLicitations.get(choice).getFirst());
     }
 
     private static int getSpenderWaterPlacement(Vector<Pair> waterLicitations, Vector<Integer> waterPaths, Board b, Player p) {
         for (int i = 0; i < waterPaths.size(); ++i) {
             Vector<Pair<Integer, Integer>> vec = b.getChannels()[waterPaths.get(i)].getAdjacentTiles();
-            for (int j = 0; j < waterPaths.size(); ++j) {
-                if (!b.isIrrigated(vec.get(j).getFirst(), vec.get(j).getSecond()) &&
-                        b.getTiles()[vec.get(j).getSecond()][vec.get(j).getFirst()].getColor().equals(p.getColor())) {
+            for (int j = 0; j < vec.size(); ++j) {
+                boolean irrigated = b.isIrrigated(vec.get(j).getSecond(), vec.get(j).getFirst());
+                Tile t = b.getTiles()[vec.get(j).getFirst()][vec.get(j).getSecond()];
+                boolean isMine = (t.getColor() != null && t.getColor().equals(p.getColor()));
+                
+                if (!irrigated && isMine) {
                     return i;
                 }
             }
