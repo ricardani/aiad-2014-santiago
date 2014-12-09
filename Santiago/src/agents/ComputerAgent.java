@@ -20,6 +20,9 @@ import logic.Tile;
 import static utils.Statics.*;
 import static utils.ConsolePrints.*;
 import static logic.Agent.*;
+import userInterface.GUI;
+import utils.GuiUtils;
+import static utils.GuiUtils.*;
 import utils.Pair;
 import utils.TilePlacement;
 
@@ -37,8 +40,8 @@ public class ComputerAgent extends Agent {
         private Player myInfo;
         private int money;
         
-        private Vector<Player> allPlayers = new Vector<>();     
-        private Board gameBoard = new Board();
+        private Vector<Player> allPlayers = new Vector<>();
+        //private Board gameBoard = new Board();
         private Vector<Tile> chooseTiles = new Vector<>();
         private Vector<Pair> waterLicitations = new Vector<>();
         // construtor do behaviour
@@ -95,19 +98,19 @@ public class ComputerAgent extends Agent {
             sendMessage(ACLMessage.INFORM, money);
         }
         
-        private void sendTilePlacement() {   
-            TilePlacement tp = generateTilePlacement(myInfo, playerLogic, gameBoard, chooseTiles);
+        private void sendTilePlacement() {
+            TilePlacement tp = generateTilePlacement(myInfo, playerLogic, GAME_BOARD, chooseTiles);
             sendMessage(ACLMessage.INFORM, tp);
         }
         
         private void sendWaterLicitation() {
-            Pair waterL = generateWaterLicitation(myInfo, playerLogic, allPlayers, gameBoard.getWaterPossiblePaths(), gameBoard);
+            Pair waterL = generateWaterLicitation(myInfo, playerLogic, allPlayers, GAME_BOARD.getWaterPossiblePaths(), GAME_BOARD);
             
             sendMessage(ACLMessage.INFORM, waterL);
         }
         
         private void sendWaterPlacement() {
-            int choice = generateWaterPlacement(myInfo, playerLogic, allPlayers, gameBoard.getWaterPossiblePaths(), waterLicitations, gameBoard);
+            int choice = generateWaterPlacement(myInfo, playerLogic, allPlayers, GAME_BOARD.getWaterPossiblePaths(), waterLicitations, GAME_BOARD);
             
             sendMessage(ACLMessage.INFORM, choice);
         }
@@ -120,6 +123,7 @@ public class ComputerAgent extends Agent {
         }
         
         private void ACL_Inform(ACLMessage msg) {
+            GUI.update();
             Serializable content_obj;
             try {
                 content_obj = msg.getContentObject();
@@ -174,6 +178,14 @@ public class ComputerAgent extends Agent {
         }
         
         private void ACL_Request(String content) {
+            
+            //Pause for TIME_TO_WAIT/1000 seconds
+            try {
+                Thread.sleep(TIME_TO_WAIT);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ComputerAgent.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             switch (content) {
                 case REQUEST_TILE_LICITATION:
                     sendTileLicitation();
@@ -205,7 +217,7 @@ public class ComputerAgent extends Agent {
                     break;
             }
         }
-         
+        
         private void ACL_Cancel(String content) {
             switch (content) {
                 case REFUSE_TILE_LICITATION:
@@ -228,66 +240,66 @@ public class ComputerAgent extends Agent {
         public boolean done() {
             return endGame;
         }
-
+        
         private void saveBoard(Serializable content_obj) {
-            gameBoard = (Board)content_obj;
+            GAME_BOARD = (Board)content_obj;
         }
-
+        
         private void saveTiles(Serializable content_obj) {
             chooseTiles = (Vector<Tile>) content_obj;
         }
         
         private void print(String type, Serializable obj){
-        
-        if(interface_type != NO_INTERFACE){
             
-            switch (type){
-                case BOARD:
-                    if(interface_type == CONSOLE_INTERFACE){
-                        Board b = (Board) obj;
-                        printBoard(b);
-                    }else{
+            if(interface_type != NO_INTERFACE){
+                
+                switch (type){
+                    case BOARD:
+                        if(interface_type == CONSOLE_INTERFACE){
+                            Board b = (Board) obj;
+                            printBoard(b);
+                        }else{
+                            
+                        }
+                        break;
+                    case TILES:
+                        if(interface_type == CONSOLE_INTERFACE){
+                            Vector<Tile> tiles = (Vector<Tile>) obj;
+                            printTilesForRound(tiles);
+                        }else{
+                            
+                        }
+                        break;
+                    case PLAYERS:
+                        if(interface_type == CONSOLE_INTERFACE){
+                            Vector<Player> p = (Vector<Player>) obj;
+                            printPlayerInfo(order, p);
+                        }else{
+                            
+                        }
+                        break;
                         
-                    }
-                    break;
-                case TILES:
-                    if(interface_type == CONSOLE_INTERFACE){
-                        Vector<Tile> tiles = (Vector<Tile>) obj;
-                        printTilesForRound(tiles);
-                    }else{
+                    case CHANNELS:
+                        if(interface_type == CONSOLE_INTERFACE){
+                            Vector<Integer> channles = (Vector<Integer>) obj;
+                            printWaterPossibelPaths(channles);
+                        }else{
+                            
+                        }
+                        break;
                         
-                    }
-                    break;
-                case PLAYERS:
-                    if(interface_type == CONSOLE_INTERFACE){
-                        Vector<Player> p = (Vector<Player>) obj;
-                        printPlayerInfo(order, p);
-                    }else{
-                        
-                    }
-                    break;
-                    
-                case CHANNELS:
-                    if(interface_type == CONSOLE_INTERFACE){
-                        Vector<Integer> channles = (Vector<Integer>) obj;
-                        printWaterPossibelPaths(channles);
-                    }else{
-                        
-                    }
-                    break;
-                    
-                case WATER_LICITATIONS:
-                    if(interface_type == CONSOLE_INTERFACE){
-                        waterLicitations = (Vector<Pair>) obj;
-                        printWaterLicitations(order, allPlayers, waterLicitations, gameBoard.getWaterPossiblePaths());
-                    }else{
-                        
-                    }
-                    break;
+                    case WATER_LICITATIONS:
+                        if(interface_type == CONSOLE_INTERFACE){
+                            waterLicitations = (Vector<Pair>) obj;
+                            printWaterLicitations(order, allPlayers, waterLicitations, GAME_BOARD.getWaterPossiblePaths());
+                        }else{
+                            
+                        }
+                        break;
+                }
+                
             }
-            
         }
-    }
         
     }   // fim da classe ManagerBehaviour
     
@@ -301,36 +313,42 @@ public class ComputerAgent extends Agent {
             //Interface
             if (args.length > 0) {
                 interface_type = Integer.parseInt((String) args[0]);
-
+                
                 if(interface_type != NO_INTERFACE && interface_type != CONSOLE_INTERFACE && interface_type != GRAPHIC_INTERFACE ){
                     interface_type = NO_INTERFACE;
                 }
             } else {
                 interface_type = NO_INTERFACE;
-
+                
             }
             
             //Player Logic
             if (args.length > 1) {
                 playerLogic = Integer.parseInt((String) args[1]);
-
+                
                 if(playerLogic != LOGIC_RANDOM && playerLogic != LOGIC_SPENDER && playerLogic != LOGIC_SAVER ){
                     playerLogic = LOGIC_RANDOM;
                 }
             } else {
                 playerLogic = LOGIC_RANDOM;
-
+                
             }
             
             //Is Human
             if (args.length > 2) {
                 //Se é humano ou nao
             } else {
-
+                
             }
         }
         
         licitation_type = LICITATION_TILES;
+        
+        if(interface_type == GRAPHIC_INTERFACE){
+            GuiUtils gUtils = new GuiUtils();
+            gUtils.initVars();
+            GUI.start(null);
+        }
         
         
         
@@ -344,7 +362,7 @@ public class ComputerAgent extends Agent {
         try {
             DFService.register(this, dfd);
         } catch (FIPAException e) {
-             System.err.println("Error register in DF");
+            System.err.println("Error register in DF");
         }
         
         // cria behaviour
@@ -363,9 +381,9 @@ public class ComputerAgent extends Agent {
             DFService.deregister(this);
             System.err.print(this);
         } catch (FIPAException e) {
-             System.err.println("Error");
+            System.err.println("Error");
         }
-    }   
+    }
     
     // envia mensagem 'content' a todos os agentes 'receiver'
     protected void sendMessage(int ACLtype, String content){
@@ -387,7 +405,7 @@ public class ComputerAgent extends Agent {
             msg.setContent(content);
             send(msg);
         } catch (FIPAException e) {
-             System.err.println("Error Sending message");
+            System.err.println("Error Sending message");
         }
         
     }
@@ -412,7 +430,7 @@ public class ComputerAgent extends Agent {
             msg.setContentObject(content);
             send(msg);
         } catch (FIPAException e) {
-             System.err.println("Error Sending message");
+            System.err.println("Error Sending message");
         } catch (IOException ex) {
             Logger.getLogger(ComputerAgent.class.getName()).log(Level.SEVERE, null, ex);
         }

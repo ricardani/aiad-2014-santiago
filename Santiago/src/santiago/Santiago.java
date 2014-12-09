@@ -3,6 +3,8 @@ package santiago;
 import java.util.Scanner;
 import userInterface.Console;
 import userInterface.Agents;
+import userInterface.GUI;
+import utils.GuiUtils;
 
 public class Santiago {
     
@@ -20,7 +22,7 @@ public class Santiago {
             
             answer = sc.nextInt();
             
-            if(answer >= 0 && answer <= 2)
+            if(answer >= 0 && answer <= 3)
                 break;
             else
                 System.err.println("Opção Inválida");
@@ -36,6 +38,11 @@ public class Santiago {
                 break;
             case 2:
                 Agents a2 = new Agents(2);
+                break;
+            case 3:
+                GuiUtils gUtils = new GuiUtils();
+                gUtils.initVars();
+                GUI.start(null);
                 break;
         }
         

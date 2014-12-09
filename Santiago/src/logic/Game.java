@@ -10,7 +10,7 @@ import static utils.Statics.*;
 
 public class Game {
     
-    private final String[] terrains = {"Banana", "Feijao", "Potato", "Sugar", "Chilli"};
+    private final String[] terrains = {TYPE_BANANA, TYPE_BEAN, TYPE_POTATO, TYPE_SUGARCANE, TYPE_CHILLI};
     private Map<String, Player> players;
     private Vector<Color> order = new Vector<>();
     

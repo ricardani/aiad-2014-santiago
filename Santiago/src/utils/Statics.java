@@ -1,8 +1,3 @@
-/*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
 package utils;
 
 import java.awt.Color;
@@ -12,10 +7,6 @@ import java.util.Random;
 import java.util.Vector;
 import static utils.Statics.Colors;
 
-/**
- *
- * @author Ricardo
- */
 public class Statics {
     
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -73,8 +64,21 @@ public class Statics {
     
     public static final int MONEY_BONUS = 3;
     
+    public static final String TYPE_DESERT = "Desert";
+    public static final String TYPE_GROUND = "Ground";
+    public static final String TYPE_BANANA = "Banana";
+    public static final String TYPE_CHILLI = "Chilli";
+    public static final String TYPE_BEAN = "Feijão";
+    public static final String TYPE_POTATO = "Potato";
+    public static final String TYPE_SUGARCANE = "Sugar";
+    
+    public static final String VERTICAL = "Vertical";
+    public static final String HORIZONTAL = "Horizontal";
+    
     
     //Static Vars For Agents
+    public static final int TIME_TO_WAIT = 0;
+    
     public static final String ENTER_GAME = "Enter Game";
     public static final String EXIT_GAME = "Exit Game";
     

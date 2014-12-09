@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package logic;
 
 import java.awt.Color;
 import java.io.Serializable;
 import static utils.Statics.*;
 
-/**
- *
- * @author Utilizador
- */
 public class Player implements Serializable, Comparable<Player>{
     private final Color color;
     private int escudos;

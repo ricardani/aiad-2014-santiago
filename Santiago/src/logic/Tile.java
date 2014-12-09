@@ -1,18 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package logic;
 
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.Objects;
+import static utils.Statics.*;
 
-/**
- *
- * @author Utilizador
- */
 public class Tile implements Serializable{
 
     private String type;
@@ -21,7 +13,7 @@ public class Tile implements Serializable{
 
     public Tile() {
 
-        type = "Ground";
+        type = TYPE_GROUND;
         workers = 0;
         color = null;
     }
@@ -42,13 +34,13 @@ public class Tile implements Serializable{
     }
 
     public void desert() {
-        type = "Desert";
+        type = TYPE_DESERT;
         workers = 0;
         color = null;
     }
 
     public boolean can_plant() {
-        return type.equals("Ground");
+        return type.equals(TYPE_GROUND);
     }
 
     @Override
@@ -77,15 +69,15 @@ public class Tile implements Serializable{
     }
     
     public boolean hasPlantation(){
-        return !(type.equals("Desert") || type.equals("Ground"));
+        return !(type.equals(TYPE_DESERT) || type.equals(TYPE_GROUND));
     }
 
     boolean isDesert() {
-        return type.equals("Desert");
+        return type.equals(TYPE_DESERT);
     }
 
     boolean isGround() {
-        return type.equals("Ground");
+        return type.equals(TYPE_GROUND);
     }
 
     @Override
