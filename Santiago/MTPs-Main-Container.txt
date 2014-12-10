@@ -1,1 +1,1 @@
-http://Ricardo-PC:7778/acc
+http://172.30.45.253:7778/acc

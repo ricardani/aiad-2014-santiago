@@ -86,23 +86,28 @@ public class Agent {
 
     private static int getSpenderLicitation(Player p, Vector<Player> vp) {
         int maxEscudos = getMaxEscudos(p, vp);
-
+        
+        if(allSameMoney(vp)){
+            return RANDOM_GENERATOR.nextInt(p.getEscudos());
+        }
+        
         if (maxEscudos < 0.8 * p.getEscudos()) {
             return maxEscudos + 1;
         }
-
+        
         if (0.8 * maxEscudos < p.getEscudos()) {
-            return (int) Math.ceil(0.8 * maxEscudos);
+            return (int) Math.floor(0.8 * maxEscudos);
         }
 
         if (0.6 * maxEscudos < p.getEscudos()) {
-            return (int) Math.ceil(0.6 * maxEscudos);
+            return (int) Math.floor(0.6 * maxEscudos);
         }
         if (0.4 * maxEscudos < p.getEscudos()) {
-            return (int) Math.ceil(0.4 * maxEscudos);
+            return (int) Math.floor(0.4 * maxEscudos);
         }
         if (0.2 * maxEscudos < p.getEscudos()) {
-            return (int) Math.ceil(0.2 * maxEscudos);
+            return (int) Math.floor(0.2 * maxEscudos);
+                    
         }
         return 0;
     }
@@ -267,14 +272,12 @@ public class Agent {
     }
 
     private static int getSaverWaterPlacement(Vector<Pair> waterLicitations, Vector<Integer> waterPaths) {
-        int choice = 0, money = -1;
-        System.out.print(".");
         if(waterLicitations.isEmpty()){
-            choice = RANDOM_GENERATOR.nextInt(waterPaths.size());
-            System.out.println("Choice  --- >  " +choice);
-            return choice;
+            return RANDOM_GENERATOR.nextInt(waterPaths.size());
         }
 
+        int choice = 0, money = -1;
+        
         for (int i = 0; i < waterLicitations.size(); i++) {
             if ((int) waterLicitations.get(i).getSecond() > money) {
                 choice = i;
@@ -282,7 +285,6 @@ public class Agent {
             }
         }
         
- 
         return waterPaths.indexOf(waterLicitations.get(choice).getFirst());
     }
 
@@ -301,5 +303,14 @@ public class Agent {
         }
         
         return getSaverWaterPlacement(waterLicitations, waterPaths);
+    }
+
+    private static boolean allSameMoney(Vector<Player> vp) {
+        int money = vp.get(0).getEscudos();
+        for(int i =1 ; i < vp.size() ; ++i){
+            if(vp.get(i).getEscudos() != money)
+                return false;
+        }
+        return true;
     }
 }

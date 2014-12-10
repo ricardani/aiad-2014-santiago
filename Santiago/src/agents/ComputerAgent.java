@@ -118,6 +118,7 @@ public class ComputerAgent extends Agent {
         //ACL Messages
         private void ACL_RejectProposal(String content) {
             if(content.equals(EXIT_GAME)){
+                System.out.println("Color: " + myInfo.getName() + "\tLogic: " + playerLogic + "\tMoney: " + myInfo.getEscudos());
                 endGame = true;
             }
         }

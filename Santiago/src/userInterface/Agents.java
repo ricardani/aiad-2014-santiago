@@ -101,17 +101,17 @@ public class Agents {
                         mainContainer.createNewAgent("p2", "agents.ComputerAgent", argsP2);
                 
                 //Agent Saver
-                Object[] argsP3 = {"0", "2"};
+                Object[] argsP3 = {"0", "1"};
                 AgentController player3 =
                         mainContainer.createNewAgent("p3", "agents.ComputerAgent", argsP3);
                 
                 //Agent Spender
-                Object[] argsP4 = {"0", "1"};
+                Object[] argsP4 = {"0", "2"};
                 AgentController player4 =
                         mainContainer.createNewAgent("p4", "agents.ComputerAgent", argsP4);
                 
                 //Agent Random
-                Object[] argsP5 = {"0", "0"};
+                Object[] argsP5 = {"0", "2"};
                 AgentController player5 =
                         mainContainer.createNewAgent("p5", "agents.ComputerAgent", argsP5);
                 
