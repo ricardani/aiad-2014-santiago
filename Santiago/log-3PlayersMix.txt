@@ -1,0 +1,140 @@
+
+*Color: Red	Logic: 2	Money: 27
+Color: Red	Logic: 2	Money: 84
+*Color: Green	Logic: 1	Money: 4
+Color: Green	Logic: 1	Money: 65
+*Color: Blue	Logic: 0	Money: 2
+Color: Blue	Logic: 0	Money: 13
+
+*Color: Red	Logic: 2	Money: 37
+Color: Red	Logic: 2	Money: 66
+*Color: Green	Logic: 1	Money: 14
+Color: Green	Logic: 1	Money: 60
+*Color: Blue	Logic: 0	Money: 9
+Color: Blue	Logic: 0	Money: 17
+
+*Color: Red	Logic: 2	Money: 27
+Color: Red	Logic: 2	Money: 52
+*Color: Green	Logic: 1	Money: 5
+Color: Green	Logic: 1	Money: 32
+*Color: Blue	Logic: 0	Money: 4
+Color: Blue	Logic: 0	Money: 8
+
+*Color: Red	Logic: 2	Money: 38
+Color: Red	Logic: 2	Money: 55
+*Color: Green	Logic: 1	Money: 3
+Color: Green	Logic: 1	Money: 25
+*Color: Blue	Logic: 0	Money: 1
+Color: Blue	Logic: 0	Money: 15
+
+*Color: Red	Logic: 2	Money: 33
+Color: Red	Logic: 2	Money: 117
+*Color: Green	Logic: 1	Money: 3
+Color: Green	Logic: 1	Money: 65
+*Color: Blue	Logic: 0	Money: 1
+Color: Blue	Logic: 0	Money: 7
+
+*Color: Blue	Logic: 2	Money: 43
+Color: Blue	Logic: 2	Money: 90
+*Color: Green	Logic: 1	Money: 4
+Color: Green	Logic: 1	Money: 72
+*Color: Red	Logic: 0	Money: 6
+Color: Red	Logic: 0	Money: 19
+
+*Color: Blue	Logic: 2	Money: 38
+Color: Blue	Logic: 2	Money: 85
+*Color: Green	Logic: 1	Money: 1
+Color: Green	Logic: 1	Money: 45
+*Color: Red	Logic: 0	Money: 3
+Color: Red	Logic: 0	Money: 17
+
+*Color: Red	Logic: 2	Money: 35
+Color: Red	Logic: 2	Money: 66
+*Color: Green	Logic: 1	Money: 7
+Color: Green	Logic: 1	Money: 35
+*Color: Blue	Logic: 0	Money: 6
+Color: Blue	Logic: 0	Money: 12
+
+*Color: Red	Logic: 2	Money: 34
+Color: Red	Logic: 2	Money: 49
+*Color: Green	Logic: 1	Money: 4
+Color: Green	Logic: 1	Money: 67
+*Color: Blue	Logic: 0	Money: 2
+Color: Blue	Logic: 0	Money: 5
+
+*Color: Red	Logic: 2	Money: 30
+Color: Red	Logic: 2	Money: 49
+*Color: Green	Logic: 1	Money: 5
+Color: Green	Logic: 1	Money: 42
+*Color: Blue	Logic: 0	Money: 6
+Color: Blue	Logic: 0	Money: 10
+
+*Color: Blue	Logic: 2	Money: 35
+Color: Blue	Logic: 2	Money: 57
+*Color: Green	Logic: 1	Money: 1
+Color: Green	Logic: 1	Money: 61
+*Color: Red	Logic: 0	Money: 10
+Color: Red	Logic: 0	Money: 31
+
+*Color: Red	Logic: 2	Money: 34
+Color: Red	Logic: 2	Money: 60
+*Color: Green	Logic: 1	Money: 2
+Color: Green	Logic: 1	Money: 29
+*Color: Blue	Logic: 0	Money: 4
+Color: Blue	Logic: 0	Money: 7
+
+*Color: Red	Logic: 2	Money: 33
+Color: Red	Logic: 2	Money: 76
+*Color: Green	Logic: 1	Money: 3
+Color: Green	Logic: 1	Money: 52
+*Color: Blue	Logic: 0	Money: 5
+Color: Blue	Logic: 0	Money: 15
+
+*Color: Red	Logic: 2	Money: 33
+Color: Red	Logic: 2	Money: 80
+*Color: Green	Logic: 1	Money: 1
+Color: Green	Logic: 1	Money: 49
+*Color: Blue	Logic: 0	Money: 5
+Color: Blue	Logic: 0	Money: 8
+
+*Color: Red	Logic: 2	Money: 35
+Color: Red	Logic: 2	Money: 54
+*Color: Green	Logic: 1	Money: 7
+Color: Green	Logic: 1	Money: 56
+*Color: Blue	Logic: 0	Money: 5
+Color: Blue	Logic: 0	Money: 9
+
+*Color: Red	Logic: 2	Money: 38
+Color: Red	Logic: 2	Money: 58
+*Color: Green	Logic: 1	Money: 2
+Color: Green	Logic: 1	Money: 45
+*Color: Blue	Logic: 0	Money: 3
+Color: Blue	Logic: 0	Money: 8
+
+*Color: Red	Logic: 2	Money: 43
+Color: Red	Logic: 2	Money: 69
+*Color: Green	Logic: 1	Money: 7
+Color: Green	Logic: 1	Money: 36
+*Color: Blue	Logic: 0	Money: 6
+Color: Blue	Logic: 0	Money: 18
+
+*Color: Red	Logic: 2	Money: 29
+Color: Red	Logic: 2	Money: 47
+*Color: Green	Logic: 1	Money: 6
+Color: Green	Logic: 1	Money: 44
+*Color: Blue	Logic: 0	Money: 4
+Color: Blue	Logic: 0	Money: 8
+
+*Color: Red	Logic: 2	Money: 37
+Color: Red	Logic: 2	Money: 72
+*Color: Green	Logic: 1	Money: 1
+Color: Green	Logic: 1	Money: 45
+*Color: Blue	Logic: 0	Money: 4
+Color: Blue	Logic: 0	Money: 12
+
+*Color: Red	Logic: 2	Money: 33
+Color: Red	Logic: 2	Money: 71
+*Color: Green	Logic: 1	Money: 4
+Color: Green	Logic: 1	Money: 55
+*Color: Blue	Logic: 0	Money: 3
+Color: Blue	Logic: 0	Money: 9

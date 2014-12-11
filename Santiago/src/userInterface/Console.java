@@ -237,13 +237,7 @@ public class Console {
         return tiles;
     }
 
-    
-
     //Funções para o ciclo de jogo
-    
-
-    
-
     private void newRound() {
         g.newTilesForRound();
         printTilesForRound(g.getTilesForRound());

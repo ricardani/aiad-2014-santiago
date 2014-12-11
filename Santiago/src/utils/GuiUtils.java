@@ -2,12 +2,15 @@ package utils;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import logic.Board;
 import logic.Channel;
+import logic.Player;
 import logic.Tile;
+import java.awt.Color;
 import static utils.Statics.*;
 
 public class GuiUtils {
@@ -22,10 +25,11 @@ public class GuiUtils {
             IMG_WATER_H, IMG_WATER_V;
     
     public static Board GAME_BOARD;
+    public static Vector<Player> GAME_PLAYERS = new Vector<>();
+    public static Vector<Color> GAME_ORDER = new Vector<>();
     
     public static void GuiUtils(){}
-    
-    
+
     public void initVars(){
         try {
             IMG_GROUND = ImageIO.read(this.getClass().getResource("../img/Ground.png"));
@@ -57,7 +61,6 @@ public class GuiUtils {
         
         GAME_BOARD = new Board();
     }
-    
     
     public static BufferedImage getImgForTile(int y, int x){
         Tile t = GAME_BOARD.getTiles()[y][x];
@@ -95,6 +98,14 @@ public class GuiUtils {
                 
         }
         
+    }
+    
+    public static Color getColorForTile(int y, int x){
+        Tile t = GAME_BOARD.getTiles()[y][x];
+        
+        if(t.getColor() != null)
+            return t.getColor();
+        return Color.BLACK;
     }
     
     public static BufferedImage getImgForChannel(int n){

@@ -26,19 +26,17 @@ import static utils.GuiUtils.*;
 import utils.Pair;
 import utils.TilePlacement;
 
-// classe do agente
 public class ComputerAgent extends Agent {
     
     private int interface_type, playerLogic, licitation_type;
     protected Vector<Color> order = new Vector<>();
     
-    // classe do behaviour
     class ComputerAgentBehaviour extends SimpleBehaviour {
         
         private Color myColor = null;
         private boolean endGame = false;
         private Player myInfo;
-        private int money;
+        private int money, backupMoney;
         
         private Vector<Player> allPlayers = new Vector<>();
         //private Board gameBoard = new Board();
@@ -77,19 +75,20 @@ public class ComputerAgent extends Agent {
                         break;
                     case ACLMessage.CANCEL:
                         ACL_Cancel(content);
-                        break;
-                        
+                        break;   
                 }
-                
             }
         }
         
         private void saveMyInfo(Serializable obj) {
             allPlayers = (Vector<Player>) obj;
-            
+            GAME_PLAYERS = allPlayers;
             for(Player p : allPlayers){
-                if(p.getColor().equals(myColor))
+                if(p.getColor().equals(myColor)){
+                    if(myInfo != null)
+                        backupMoney = myInfo.getEscudos();
                     myInfo = p;
+                }
             }
         }
         
@@ -118,19 +117,21 @@ public class ComputerAgent extends Agent {
         //ACL Messages
         private void ACL_RejectProposal(String content) {
             if(content.equals(EXIT_GAME)){
-                System.out.println("Color: " + myInfo.getName() + "\tLogic: " + playerLogic + "\tMoney: " + myInfo.getEscudos());
+                String infoBefore = "*Color: " + myInfo.getName() + "\tLogic: " + playerLogic + "\tMoney: " + backupMoney;
+                String infoAfter = "Color: " + myInfo.getName() + "\tLogic: " + playerLogic + "\tMoney: " + myInfo.getEscudos();
+                writeToFile(infoBefore);
+                writeToFile(infoAfter);
                 endGame = true;
             }
         }
         
         private void ACL_Inform(ACLMessage msg) {
-            GUI.update();
             Serializable content_obj;
             try {
                 content_obj = msg.getContentObject();
                 if(content_obj instanceof Board){
-                    print(BOARD, content_obj);
                     saveBoard(content_obj);
+                    print(BOARD, content_obj);
                 }else if(content_obj instanceof Vector){
                     Vector aux = (Vector) content_obj;
                     if(aux.get(0) instanceof Tile){
@@ -140,6 +141,7 @@ public class ComputerAgent extends Agent {
                         print(CHANNELS, content_obj);
                     }else if(aux.get(0) instanceof Color){
                         order = (Vector<Color>) content_obj;
+                        GAME_ORDER = (Vector<Color>) content_obj;
                     }else if(aux.get(0) instanceof Player){
                         print(PLAYERS, content_obj);
                         saveMyInfo(content_obj);
@@ -236,7 +238,6 @@ public class ComputerAgent extends Agent {
             }
         }
         
-        // método done
         @Override
         public boolean done() {
             return endGame;
@@ -302,9 +303,8 @@ public class ComputerAgent extends Agent {
             }
         }
         
-    }   // fim da classe ManagerBehaviour
+    }
     
-    // método setup
     @Override
     protected void setup() {
         
@@ -334,6 +334,14 @@ public class ComputerAgent extends Agent {
                 playerLogic = LOGIC_RANDOM;
                 
             }
+            
+            if(interface_type == GRAPHIC_INTERFACE){
+                GuiUtils gUtils = new GuiUtils();
+                gUtils.initVars();
+                GUI.start(null);
+            }
+            
+            
             
             //Is Human
             if (args.length > 2) {
@@ -372,9 +380,8 @@ public class ComputerAgent extends Agent {
         
         sendMessage(ACLMessage.PROPOSE, ENTER_GAME);
         
-    }   // fim do metodo setup
+    } 
     
-    // método takeDown
     @Override
     protected void takeDown() {
         // retira registo no DF
@@ -386,7 +393,7 @@ public class ComputerAgent extends Agent {
         }
     }
     
-    // envia mensagem 'content' a todos os agentes 'receiver'
+    // envia mensagem String 'content' a todos os agentes 'receiver'
     protected void sendMessage(int ACLtype, String content){
         
         // pesquisa DF por agentes
@@ -411,7 +418,7 @@ public class ComputerAgent extends Agent {
         
     }
     
-    // envia mensagem 'content' a todos os agentes 'receiver'
+    // envia mensagem Serializable 'content' a todos os agentes 'receiver'
     protected void sendMessage(int ACLtype, Serializable content){
         
         // pesquisa DF por agentes

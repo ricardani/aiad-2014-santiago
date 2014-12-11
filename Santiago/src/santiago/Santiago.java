@@ -16,38 +16,33 @@ public class Santiago {
         while (true) {
             System.out.println("Opções de jogo : ");
             System.out.println("[0] Consola");
-            System.out.println("[1] 3 Agentes");
-            System.out.println("[2] 5 Agentes");
-            System.out.println("[3] Test GUI");
+            System.out.println("[1] 3 Agentes Mix");
+            System.out.println("[2] 5 Agentes Mix");
+            System.out.println("[3] 3 Agentes Random");
+            System.out.println("[4] 3 Agentes Spender");
+            System.out.println("[5] 3 Agentes Saver");
+            System.out.println("[6] 5 Agentes Random");
+            System.out.println("[7] 5 Agentes Spender");
+            System.out.println("[8] 5 Agentes Saver");
+            System.out.println("[9] Test GUI");
             
             answer = sc.nextInt();
             
-            if(answer >= 0 && answer <= 3)
+            if(answer >= 0 && answer <= 9)
                 break;
             else
                 System.err.println("Opção Inválida");
         }
         
-        switch(answer){
-            case 0:
-                Console c = new Console();
-                c.gameCycle();
-                break;
-            case 1:
-                Agents a1 = new Agents(1);
-                break;
-            case 2:
-                Agents a2 = new Agents(2);
-                break;
-            case 3:
-                GuiUtils gUtils = new GuiUtils();
-                gUtils.initVars();
-                GUI.start(null);
-                break;
-        }
-        
-        
-        
+        if(answer == 0){
+            Console c = new Console();
+            c.gameCycle();
+        }else if(answer > 0 && answer < 9){
+            Agents a = new Agents(answer);
+        }else{
+            GuiUtils gUtils = new GuiUtils();
+            gUtils.initVars();
+            GUI.start(null);
+        }              
     }
-    
 }

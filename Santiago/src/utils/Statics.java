@@ -1,6 +1,11 @@
 package utils;
 
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -133,4 +138,13 @@ public class Statics {
     
     public static final int LICITATION_TILES = 0;
     public static final int LICITATION_WATER = 1;
+    
+    //Write to File
+    public static void writeToFile(String content){
+        try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log.txt", true)))) {
+            out.println(content);
+        }catch (IOException e) {
+            //exception handling left as an exercise for the reader
+        }
+    }
 }
