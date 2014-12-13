@@ -107,6 +107,7 @@ public class Statics {
     public static final int LOGIC_RANDOM = 0;
     public static final int LOGIC_SPENDER = 1;
     public static final int LOGIC_SAVER = 2;
+    public static final int LOGIC_MIXED = 3;
     
     public static final String BOARD = "Board";
     public static final String TILES = "Tiles";

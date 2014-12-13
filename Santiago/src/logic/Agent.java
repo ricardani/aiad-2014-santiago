@@ -20,6 +20,9 @@ public class Agent {
             case LOGIC_SAVER:
                 money = getSaverLicitation(p, vp);
                 break;
+            case LOGIC_MIXED:
+                money = getSaverLicitation(p, vp);
+                break;    
         }
 
         return money;
@@ -37,6 +40,9 @@ public class Agent {
                 break;
             case LOGIC_SAVER:
                 tile = saverTilePlacement(tiles, b);
+                break;
+            case LOGIC_MIXED:
+                tile = spenderTilePlacement(tiles, b);
                 break;
         }
 
@@ -59,6 +65,10 @@ public class Agent {
                 waterChoice = getWaterPositionChoice(p, waterPaths, b);
                 money = getSaverLicitation(p, vp);
                 break;
+            case LOGIC_MIXED:
+                waterChoice = getWaterPositionChoice(p, waterPaths, b);
+                money = getSpenderLicitation(p, vp);
+                break;                
         }
 
         return new Pair(waterChoice, money);
@@ -78,6 +88,9 @@ public class Agent {
             case LOGIC_SAVER:
                 choice = getSaverWaterPlacement(waterLicitations, waterPaths);
                 break;
+            case LOGIC_MIXED:
+                choice = getSpenderWaterPlacement(waterLicitations, waterPaths, b, p);
+                break;    
         }
 
         return choice;
