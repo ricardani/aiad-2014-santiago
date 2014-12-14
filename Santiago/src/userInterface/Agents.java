@@ -65,6 +65,9 @@ public class Agents {
             case 8:
                 fivePlayers(sc, LOGIC_SAVER);
                 break;
+            case 9:
+                fourPlayers(sc);
+                break;
                 
         }
     }
@@ -174,6 +177,57 @@ public class Agents {
             player3.start();
             player4.start();
             player5.start();
+            
+        } catch (jade.wrapper.StaleProxyException e) {
+            System.err.println("Error launching agent...");
+        }
+    }
+    
+    private void fourPlayers(Scanner sc) {
+        String logic1, logic2, logic3, logic4;
+        
+        logic1 = "0";
+        logic2 = "1";
+        logic3 = "2";
+        logic4 = "3";
+        
+        
+        try{
+            
+            //Manager Agent
+            Object[] args = {"4"};
+            AgentController manager =
+                    mainContainer.createNewAgent("manager", "agents.Manager", args);
+            // start the agent
+            manager.start();
+            
+            //Player Agents
+            
+            Object[] argsP1 = {"1", logic1};
+            AgentController player1 =
+                    mainContainer.createNewAgent("p1", "agents.ComputerAgent", argsP1);
+            
+            Object[] argsP2 = {"2", logic2};
+            AgentController player2 =
+                    mainContainer.createNewAgent("p2", "agents.ComputerAgent", argsP2);
+            
+            Object[] argsP3 = {"0", logic3};
+            AgentController player3 =
+                    mainContainer.createNewAgent("p3", "agents.ComputerAgent", argsP3);
+            
+            Object[] argsP4 = {"0", logic4};
+            AgentController player4 =
+                    mainContainer.createNewAgent("p4", "agents.ComputerAgent", argsP4);
+            
+            System.out.println();
+            System.out.println("Start ??");
+            sc.nextLine();
+            
+            // start the agents
+            player1.start();
+            player2.start();
+            player3.start();
+            player4.start();
             
         } catch (jade.wrapper.StaleProxyException e) {
             System.err.println("Error launching agent...");

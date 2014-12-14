@@ -329,7 +329,7 @@ public class ComputerAgent extends Agent {
             if (args.length > 1) {
                 playerLogic = Integer.parseInt((String) args[1]);
                 
-                if(playerLogic != LOGIC_RANDOM && playerLogic != LOGIC_SPENDER && playerLogic != LOGIC_SAVER ){
+                if(playerLogic != LOGIC_RANDOM && playerLogic != LOGIC_SPENDER && playerLogic != LOGIC_SAVER && playerLogic != LOGIC_MIXED ){
                     playerLogic = LOGIC_RANDOM;
                 }
             } else {

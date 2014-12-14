@@ -1,0 +1,8 @@
+*Color: Red	Logic: 3	Money: 3
+Color: Red	Logic: 3	Money: 36
+*Color: Blue	Logic: 2	Money: 43
+Color: Blue	Logic: 2	Money: 74
+*Color: Yellow	Logic: 1	Money: 2
+Color: Yellow	Logic: 1	Money: 34
+*Color: Green	Logic: 0	Money: 2
+Color: Green	Logic: 0	Money: 9
