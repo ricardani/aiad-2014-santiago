@@ -8,7 +8,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 import logic.Player;
+import logic.Tile;
 import static utils.GuiUtils.GAME_PLAYERS;
+import static utils.GuiUtils.ROUND_TILES;
 import static utils.GuiUtils.getColorForTile;
 import static utils.GuiUtils.getImgForChannel;
 import static utils.GuiUtils.getImgForTile;
@@ -70,6 +72,18 @@ public class BoardPanel extends JPanel {
             }
         }
         
+        //Rounf Tiles
+        posX = 100;
+        posY = 680;
+        
+        for (Tile t:  ROUND_TILES) {
+            g.drawImage(getImgForTile(t), posX, posY, this);
+            g2.setColor(Color.BLACK);
+            g2.setStroke(new BasicStroke(3));
+            g2.draw(new Rectangle2D.Double(posX, posY, 70, 65));
+            posX += 90;
+        }
+        
         //ALL PLAYER INFO
         posX = 900;
         posY = 100;
@@ -84,6 +98,7 @@ public class BoardPanel extends JPanel {
             text = info.toCharArray();
             g.drawChars(text, 0, text.length, posX, posY);
             posY += 100;
-        } 
+        }
+        
     }
 }

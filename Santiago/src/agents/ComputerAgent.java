@@ -40,7 +40,7 @@ public class ComputerAgent extends Agent {
         
         private Vector<Player> allPlayers = new Vector<>();
         //private Board gameBoard = new Board();
-        private Vector<Tile> chooseTiles = new Vector<>();
+        //private Vector<Tile> chooseTiles = new Vector<>();
         private Vector<Pair> waterLicitations = new Vector<>();
         // construtor do behaviour
         public ComputerAgentBehaviour(Agent a) {
@@ -98,7 +98,7 @@ public class ComputerAgent extends Agent {
         }
         
         private void sendTilePlacement() {
-            TilePlacement tp = generateTilePlacement(myInfo, playerLogic, GAME_BOARD, chooseTiles);
+            TilePlacement tp = generateTilePlacement(myInfo, playerLogic, GAME_BOARD, ROUND_TILES);
             sendMessage(ACLMessage.INFORM, tp);
         }
         
@@ -213,6 +213,8 @@ public class ComputerAgent extends Agent {
                     licitation_type = (licitation_type + 1) % 2;
                     break;
                 case CONFIRM_TILE_PLACEMENT:
+                    if(ROUND_TILES.size() == 1)
+                        ROUND_TILES.clear();
                     break;
                 case CONFIRM_WATER_LICITAION:
                     break;
@@ -248,7 +250,7 @@ public class ComputerAgent extends Agent {
         }
         
         private void saveTiles(Serializable content_obj) {
-            chooseTiles = (Vector<Tile>) content_obj;
+            ROUND_TILES = (Vector<Tile>) content_obj;
         }
         
         private void print(String type, Serializable obj){

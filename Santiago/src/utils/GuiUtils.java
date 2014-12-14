@@ -27,6 +27,7 @@ public class GuiUtils {
     public static Board GAME_BOARD;
     public static Vector<Player> GAME_PLAYERS = new Vector<>();
     public static Vector<Color> GAME_ORDER = new Vector<>();
+    public static Vector<Tile> ROUND_TILES = new Vector<>();
     
     public static void GuiUtils(){}
 
@@ -65,6 +66,43 @@ public class GuiUtils {
     public static BufferedImage getImgForTile(int y, int x){
         Tile t = GAME_BOARD.getTiles()[y][x];
         
+        switch(t.getType()){
+            case TYPE_BANANA:
+                if(t.getWorkers() == 1)
+                    return IMG_BANANA_1WORKER;
+                else
+                    return IMG_BANANA_2WORKERS;
+            case TYPE_CHILLI:
+                if(t.getWorkers() == 1)
+                    return IMG_CHILI_1WORKER;
+                else
+                    return IMG_CHILI_2WORKERS;
+            case TYPE_BEAN:
+                if(t.getWorkers() == 1)
+                    return IMG_BEAN_1WORKER;
+                else
+                    return IMG_BEAN_2WORKERS;
+            case TYPE_POTATO:
+                if(t.getWorkers() == 1)
+                    return IMG_POTATO_1WORKER;
+                else
+                    return IMG_POTATO_2WORKERS;
+            case TYPE_SUGARCANE:
+                if(t.getWorkers() == 1)
+                    return IMG_SUGARCANE_1WORKER;
+                else
+                    return IMG_SUGARCANE_2WORKERS;
+            case TYPE_DESERT:
+                return IMG_DESERT;
+            default:
+                return IMG_GROUND;
+                
+        }
+        
+    }
+    
+    public static BufferedImage getImgForTile(Tile t){
+            
         switch(t.getType()){
             case TYPE_BANANA:
                 if(t.getWorkers() == 1)

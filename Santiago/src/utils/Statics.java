@@ -82,7 +82,7 @@ public class Statics {
     
     
     //Static Vars For Agents
-    public static final int TIME_TO_WAIT = 0;
+    public static final int TIME_TO_WAIT = 250;
     
     public static final String ENTER_GAME = "Enter Game";
     public static final String EXIT_GAME = "Exit Game";
